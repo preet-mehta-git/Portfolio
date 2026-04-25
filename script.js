@@ -139,15 +139,17 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  /* ========== CONTACT FORM HANDLER ========== */
+  /* ========== CONTACT FORM HANDLER (WEB3FORMS) ========== */
   const contactForm = document.getElementById('contactForm');
   const formSuccess = document.getElementById('formSuccess');
 
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     const originalHTML = submitBtn.innerHTML;
+    
+    // UI state: Sending...
     submitBtn.innerHTML = `
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
@@ -157,17 +159,48 @@ document.addEventListener('DOMContentLoaded', () => {
     submitBtn.disabled = true;
     submitBtn.style.opacity = '.7';
 
-    setTimeout(() => {
-      contactForm.reset();
+    // Prepare data for Web3Forms
+    const formData = new FormData(contactForm);
+    formData.append('access_key', 'cf2073ed-eeae-48f2-8d28-0d20a81917be');
+    formData.append('subject', 'New Portfolio Message');
+    formData.append('from_name', 'Thinker Portfolio');
+
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: json
+      });
+
+      const result = await response.json();
+
+      if (response.status === 200) {
+        // Success
+        contactForm.reset();
+        formSuccess.classList.add('show');
+        setTimeout(() => {
+          formSuccess.classList.remove('show');
+        }, 5000);
+      } else {
+        // Error handling
+        console.error(result.message);
+        alert("Something went wrong. Please try again later.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong. Please check your connection.");
+    } finally {
+      // Restore UI state
       submitBtn.innerHTML = originalHTML;
       submitBtn.disabled = false;
       submitBtn.style.opacity = '1';
-      formSuccess.classList.add('show');
-
-      setTimeout(() => {
-        formSuccess.classList.remove('show');
-      }, 4000);
-    }, 1500);
+    }
   });
 
 
