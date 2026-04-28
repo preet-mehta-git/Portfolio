@@ -554,10 +554,21 @@ svg.icon-xl {
   animation: specialtyPop .6s var(--ease-spring) forwards;
 }
 
-.specialty-item:nth-child(1) { animation-delay: 1s; }
-.specialty-item:nth-child(2) { animation-delay: 1.15s; }
-.specialty-item:nth-child(3) { animation-delay: 1.3s; }
-.specialty-item:nth-child(4) { animation-delay: 1.45s; }
+.specialty-item:nth-child(1) {
+  animation-delay: 1s;
+}
+
+.specialty-item:nth-child(2) {
+  animation-delay: 1.15s;
+}
+
+.specialty-item:nth-child(3) {
+  animation-delay: 1.3s;
+}
+
+.specialty-item:nth-child(4) {
+  animation-delay: 1.45s;
+}
 
 .specialty-item:hover {
   background: var(--bg-card-hover);
@@ -601,49 +612,26 @@ svg.icon-xl {
   position: relative;
 }
 
-.about-code-block {
-  background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 32px;
-  font-family: 'Fira Code', monospace;
-  font-size: .85rem;
-  color: var(--text-secondary);
-  line-height: 2;
+.about-image-wrapper {
   position: relative;
+  border-radius: var(--radius-lg);
   overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-subtle);
+  aspect-ratio: 4/5;
+  background: var(--bg-card);
 }
 
-.about-code-block::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
+.about-image {
   width: 100%;
-  height: 3px;
-  background: var(--gradient-primary);
-}
-
-.about-code-block .code-line {
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
   display: block;
 }
 
-.about-code-block .code-keyword {
-  color: var(--accent-indigo);
-}
-
-.about-code-block .code-string {
-  color: var(--accent-cyan);
-}
-
-.about-code-block .code-prop {
-  color: var(--accent-pink);
-}
-
-.about-code-block .code-comment {
-  color: var(--text-muted);
-  font-style: italic;
+.about-image-wrapper:hover .about-image {
+  transform: scale(1.05);
 }
 
 .about-visual::after {
@@ -1463,7 +1451,7 @@ svg.icon-xl {
     gap: 10px;
     margin-top: 36px;
   }
-  
+
   .specialty-item {
     font-size: 0.78rem;
     padding: 8px 16px;
