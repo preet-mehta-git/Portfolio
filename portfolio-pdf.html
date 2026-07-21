@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preet Mehta | Full Stack Developer & BDE Portfolio</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap">
+  <style>
+    /* ============================================
+       DESIGN TOKENS (Matching portfolio style)
+       ============================================ */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #faf8f5;
+      --bg-card: #ffffff;
+      --text-primary: #3d3a36;
+      --text-secondary: #7d766f;
+      --text-muted: #9e958d;
+      
+      --accent-copper: #c97a5e;
+      --accent-light: rgba(201, 122, 94, 0.08);
+      --gradient-primary: linear-gradient(135deg, #c97a5e 0%, #d4966b 100%);
+      
+      --border-subtle: rgba(61, 58, 54, 0.1);
+      --border-accent: #c97a5e;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================
+       PAGED MEDIA & PRINT RULES
+       ============================================ */
+    @page {
+      size: A4;
+      margin: 1.6cm;
+    }
+
+    /* Print margins and page breaks */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 1.6cm;
+      margin: 0 auto;
+      background: var(--bg-primary);
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    /* For screen preview styling */
+    @media screen {
+      body {
+        background-color: #e2e8f0;
+        padding: 40px 0;
+      }
+      .page {
+        background-color: white;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+        border-radius: 8px;
+      }
+    }
+
+    @media print {
+      body {
+        background-color: white;
+      }
+      .page {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+      .page:last-child {
+        page-break-after: avoid;
+      }
+      /* Ensure colors print properly */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ============================================
+       TYPOGRAPHY & UTILITIES
+       ============================================ */
+    h1, h2, h3, h4 {
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .gradient-text {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: inline-block;
+    }
+
+    .highlight {
+      color: var(--accent-copper);
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-copper);
+      margin-bottom: 8px;
+    }
+
+    .section-label svg {
+      width: 14px;
+      height: 14px;
+      stroke: var(--accent-copper);
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--accent-light);
+      padding-bottom: 6px;
+    }
+
+    svg.icon {
+      width: 1.1em;
+      height: 1.1em;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: middle;
+    }
+
+    /* ============================================
+       PAGE 1 LAYOUT
+       ============================================ */
+    
+    /* Header Block */
+    .header-block {
+      display: grid;
+      grid-template-columns: 1.2fr 2.8fr;
+      gap: 24px;
+      align-items: center;
+      border-bottom: 3px solid var(--accent-copper);
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+    }
+
+    .profile-img-container {
+      width: 130px;
+      height: 130px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 3px solid var(--accent-copper);
+      box-shadow: 0 8px 16px rgba(201, 122, 94, 0.15);
+    }
+
+    .profile-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-info h1 {
+      font-size: 2.2rem;
+      margin-bottom: 4px;
+      line-height: 1.1;
+    }
+
+    .header-role {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .contact-item svg {
+      color: var(--accent-copper);
+      flex-shrink: 0;
+    }
+
+    .contact-item a:hover {
+      color: var(--accent-copper);
+      text-decoration: underline;
+    }
+
+    /* Main Grid - Two Columns */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 2.3fr 1.7fr;
+      gap: 24px;
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Bio Section */
+    .bio-text {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    .bio-text p {
+      margin-bottom: 10px;
+    }
+
+    /* Experience Card */
+    .exp-item {
+      margin-bottom: 14px;
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 6px;
+    }
+
+    .exp-role {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .exp-company {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent-copper);
+    }
+
+    .exp-duration {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: var(--accent-light);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .exp-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .exp-bullets li {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      position: relative;
+      padding-left: 14px;
+      margin-bottom: 5px;
+    }
+
+    .exp-bullets li::before {
+      content: "•";
+      color: var(--accent-copper);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+      top: -1px;
+    }
+
+    /* Skills Block */
+    .skills-section {
+      background-color: var(--bg-secondary);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .skill-category {
+      margin-bottom: 12px;
+    }
+
+    .skill-category:last-child {
+      margin-bottom: 0;
+    }
+
+    .skill-category h4 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .skill-category h4 svg {
+      color: var(--accent-copper);
+      width: 14px;
+      height: 14px;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: #ffffff;
+      color: var(--text-primary);
+      border: 1px solid var(--border-subtle);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+    }
+
+    /* Quick stats */
+    .stats-box {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      text-align: center;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      background-color: var(--bg-secondary);
+    }
+
+    .stat-num {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent-copper);
+      line-height: 1;
+    }
+
+    .stat-lbl {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Contact Form Footer Callout */
+    .pitch-card {
+      background: linear-gradient(135deg, rgba(201, 122, 94, 0.05) 0%, rgba(212, 150, 107, 0.05) 100%);
+      border: 1.5px dashed var(--accent-copper);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      text-align: center;
+    }
+
+    .pitch-card h4 {
+      font-size: 0.95rem;
+      color: var(--accent-copper);
+      margin-bottom: 4px;
+    }
+
+    .pitch-card p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================
+       PAGE 2 LAYOUT
+       ============================================ */
+    
+    .projects-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .proj-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .proj-top {
+      margin-bottom: 10px;
+    }
+
+    .proj-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .proj-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .proj-link {
+      color: var(--accent-copper);
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .proj-link:hover {
+      text-decoration: underline;
+    }
+
+    .proj-desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .proj-bullets {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 12px;
+    }
+
+    .proj-bullets li {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      position: relative;
+      padding-left: 12px;
+      margin-bottom: 4px;
+    }
+
+    .proj-bullets li::before {
+      content: "→";
+      color: var(--accent-copper);
+      font-weight: bold;
+      position: absolute;
+      left: 0;
+    }
+
+    .proj-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .proj-stack span {
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(201, 122, 94, 0.1);
+      color: var(--accent-copper);
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+    }
+
+    /* Services & Why Choose Me layout */
+    .services-why-grid {
+      display: grid;
+      grid-template-columns: 2.2fr 1.8fr;
+      gap: 24px;
+    }
+
+    .service-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .service-pill {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .service-pill h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .service-pill h4 svg {
+      color: var(--accent-copper);
+      width: 14px;
+      height: 14px;
+    }
+
+    .service-pill p {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    /* Why Us Boxes */
+    .why-box {
+      margin-bottom: 10px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      border-left: 3px solid var(--accent-copper);
+    }
+
+    .why-box h4 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .why-box p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    /* Footer Branding */
+    .pdf-footer {
+      position: absolute;
+      bottom: 1.6cm;
+      left: 1.6cm;
+      right: 1.6cm;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .pdf-footer-logo {
+      font-weight: 800;
+      color: var(--accent-copper);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== PAGE 1 ==================== -->
+  <div class="page">
+    
+    <!-- Header -->
+    <header class="header-block">
+      <div class="profile-img-container">
+        <img src="profile.jpg" alt="Preet Mehta" class="profile-img">
+      </div>
+      <div class="header-info">
+        <h1>Preet Mehta</h1>
+        <div class="header-role">Full Stack Developer & Business Development Executive</div>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:preet.abc2005@gmail.com">preet.abc2005@gmail.com</a>
+          </div>
+          <div class="contact-item">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <span>98249 23752</span>
+          </div>
+          <div class="contact-item">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            <a href="https://linkedin.com/in/preetm/" target="_blank">linkedin.com/in/preetm</a>
+          </div>
+          <div class="contact-item">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <a href="https://github.com/preet-mehta-git" target="_blank">github.com/preet-mehta-git</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Grid -->
+    <div class="main-grid">
+      
+      <!-- Left Column -->
+      <div class="left-col">
+        
+        <!-- About Me -->
+        <section>
+          <div class="section-label">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+            About Me
+          </div>
+          <h2 class="section-title">Solving Real Problems</h2>
+          <div class="bio-text">
+            <p>
+              I am a <strong>Full Stack Developer</strong> who loves turning ideas into functional, scalable web applications. I am passionate about building real-world systems such as e-governance platforms, blogging websites, and study tools. Every project is a chance to deliver meaningful solutions.
+            </p>
+            <p>
+              Beyond writing code, I work as a <strong>Business Development Executive at TechEniac</strong>, bridging the gap between client requirements and technical execution. This unique blend of business acumen and technical skills allows me to design products that work flawlessly and deliver strong business value.
+            </p>
+          </div>
+        </section>
+
+        <!-- Experience -->
+        <section>
+          <div class="section-label">
+            <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Professional Experience
+          </div>
+          <h2 class="section-title">Career Milestones</h2>
+          
+          <div class="exp-item">
+            <div class="exp-header">
+              <div>
+                <div class="exp-role">Business Development Executive</div>
+                <div class="exp-company">TechEniac</div>
+              </div>
+              <span class="exp-duration">2024 - Present</span>
+            </div>
+            <p class="exp-desc">
+              Working at the intersection of technology and business to collaborate with clients, analyze project requirements, and ensure technical teams deliver exactly what is needed.
+            </p>
+            <ul class="exp-bullets">
+              <li>Engaging with clients to gather and analyze business requirements.</li>
+              <li>Collaborating with cross-functional technical teams to deliver custom projects.</li>
+              <li>Preparing proposals, technical specifications, and pitches for potential clients.</li>
+              <li>Identifying new business channels and maintaining positive client relationships.</li>
+            </ul>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-col">
+        
+        <!-- Stats -->
+        <div class="stats-box">
+          <div>
+            <div class="stat-num">4+</div>
+            <div class="stat-lbl">Featured Apps</div>
+          </div>
+          <div>
+            <div class="stat-num">8+</div>
+            <div class="stat-lbl">Core Techs</div>
+          </div>
+          <div>
+            <div class="stat-num">&infin;</div>
+            <div class="stat-lbl">Commitment</div>
+          </div>
+        </div>
+
+        <!-- Skills -->
+        <section class="skills-section">
+          <div class="section-label">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v4"/><path d="m6.8 15-3.5 2"/><path d="m20.7 7-3.5 2"/><circle cx="12" cy="12" r="4"/></svg>
+            Skills & Tools
+          </div>
+          
+          <div class="skill-category">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10M7 12h10M7 17h6"/></svg>
+              Frontend
+            </h4>
+            <div class="tags-container">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">TypeScript</span>
+              <span class="tag">React.js</span>
+              <span class="tag">Next.js</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
+              Backend
+            </h4>
+            <div class="tags-container">
+              <span class="tag">Node.js</span>
+              <span class="tag">Python</span>
+              <span class="tag">Django</span>
+              <span class="tag">RESTful APIs</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5M3 12a9 3 0 0 0 18 0"/></svg>
+              Databases
+            </h4>
+            <div class="tags-container">
+              <span class="tag">SQL</span>
+              <span class="tag">MySQL</span>
+              <span class="tag">PostgreSQL</span>
+              <span class="tag">MongoDB</span>
+            </div>
+          </div>
+
+          <div class="skill-category">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              Tools & Practices
+            </h4>
+            <div class="tags-container">
+              <span class="tag">Git & GitHub</span>
+              <span class="tag">Docker</span>
+              <span class="tag">OpenAI API</span>
+              <span class="tag">SDLC</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Callout -->
+        <div class="pitch-card">
+          <h4>Looking for a developer?</h4>
+          <p>I am currently available for freelance contracts and full-time engineering opportunities.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="pdf-footer">
+      <div>&copy; 2026 Preet Mehta | Professional Portfolio</div>
+      <div class="pdf-footer-logo">Thinker.</div>
+      <div>Page 1 of 2</div>
+    </footer>
+
+  </div>
+
+  <!-- ==================== PAGE 2 ==================== -->
+  <div class="page page-break">
+    
+    <!-- Projects Section -->
+    <section style="margin-bottom: 24px;">
+      <div class="section-label">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Featured Projects
+      </div>
+      <h2 class="section-title" style="margin-bottom: 16px;">Demonstrated Implementations</h2>
+      
+      <div class="projects-container">
+        
+        <!-- Volti -->
+        <div class="proj-card">
+          <div class="proj-top">
+            <div class="proj-title-bar">
+              <span class="proj-title">Volti Electric Bike</span>
+              <a href="https://volti-electric-bike.vercel.app" target="_blank" class="proj-link">
+                Demo
+                <svg class="icon" style="width: 12px; height: 12px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+            <p class="proj-desc">A highly visual and modern landing page for an premium electric bike brand, focusing on lead capture and conversion.</p>
+            <ul class="proj-bullets">
+              <li>Responsive mobile-first layout.</li>
+              <li>Interactive bike showcase specs.</li>
+              <li>Interactive custom booking flow.</li>
+            </ul>
+          </div>
+          <div class="proj-stack">
+            <span>HTML5</span><span>CSS3</span><span>JavaScript</span>
+          </div>
+        </div>
+
+        <!-- Study Tool -->
+        <div class="proj-card">
+          <div class="proj-top">
+            <div class="proj-title-bar">
+              <span class="proj-title">Study Tool</span>
+              <a href="https://study-tool-1.onrender.com" target="_blank" class="proj-link">
+                Demo
+                <svg class="icon" style="width: 12px; height: 12px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+            <p class="proj-desc">A customized workspace platform helping students manage study materials, run smart quizzes, and monitor learning curves.</p>
+            <ul class="proj-bullets">
+              <li>Comprehensive resource organization.</li>
+              <li>Self-assessment quizzes engine.</li>
+              <li>Backend analytics for study progress.</li>
+            </ul>
+          </div>
+          <div class="proj-stack">
+            <span>Django</span><span>Python</span><span>JS</span><span>CSS</span>
+          </div>
+        </div>
+
+        <!-- E-Governance Portal -->
+        <div class="proj-card">
+          <div class="proj-top">
+            <div class="proj-title-bar">
+              <span class="proj-title">E-Governance Portal</span>
+              <a href="https://governance-1.onrender.com" target="_blank" class="proj-link">
+                Demo
+                <svg class="icon" style="width: 12px; height: 12px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+            <p class="proj-desc">A secure citizen-centric platform providing streamlined, paperless access to civic services and license approvals.</p>
+            <ul class="proj-bullets">
+              <li>Secure JWT role-based access.</li>
+              <li>Real-time application progress logs.</li>
+              <li>Interactive dashboard for admin approvals.</li>
+            </ul>
+          </div>
+          <div class="proj-stack">
+            <span>Node.js</span><span>Express</span><span>MongoDB</span><span>JS</span>
+          </div>
+        </div>
+
+        <!-- Blogging Website -->
+        <div class="proj-card">
+          <div class="proj-top">
+            <div class="proj-title-bar">
+              <span class="proj-title">Blogging Website</span>
+              <a href="https://blogging-site-blue.vercel.app" target="_blank" class="proj-link">
+                Demo
+                <svg class="icon" style="width: 12px; height: 12px;" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+            <p class="proj-desc">A premium responsive content hub enabling rich-text writing, categories sorting, and community feedback mechanics.</p>
+            <ul class="proj-bullets">
+              <li>Rich-text integrated publishing editor.</li>
+              <li>Category filters and dynamic search.</li>
+              <li>Interactive likes and comments threads.</li>
+            </ul>
+          </div>
+          <div class="proj-stack">
+            <span>Node.js</span><span>Express</span><span>MongoDB</span><span>CSS</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Services & Why choose me -->
+    <div class="services-why-grid">
+      
+      <!-- Services -->
+      <section>
+        <div class="section-label">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          Services Offered
+        </div>
+        <h2 class="section-title" style="margin-bottom: 12px;">What I Can Build</h2>
+        
+        <div class="service-list">
+          <div class="service-pill">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg>
+              Full-Stack Web Apps
+            </h4>
+            <p>End-to-end, highly scalable systems with robust APIs and beautiful dashboards.</p>
+          </div>
+          
+          <div class="service-pill">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+              Responsive UI/UX
+            </h4>
+            <p>Pixel-perfect, interactive layouts that adapt elegantly across all viewport devices.</p>
+          </div>
+
+          <div class="service-pill">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/></svg>
+              Backend & DB Design
+            </h4>
+            <p>Optimized relational and non-relational database architecture and REST APIs.</p>
+          </div>
+
+          <div class="service-pill">
+            <h4>
+              <svg class="icon" viewBox="0 0 24 24"><path d="M12 2v4"/><path d="M17.7 9.7a6 6 0 0 0-11.4 0"/><path d="M12 10v8"/></svg>
+              Bug Fixing & Audits
+            </h4>
+            <p>Quick identification, code quality audits, and systematic resolution of tech bottlenecks.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why Me -->
+      <section>
+        <div class="section-label">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          Why Choose Me
+        </div>
+        <h2 class="section-title" style="margin-bottom: 12px;">Technical Edge</h2>
+        
+        <div class="why-box">
+          <h4>Tech + Business Acumen</h4>
+          <p>My dual role as a Developer and BDE enables me to build software aligned with real-world business objectives, and speak clearly with both stakeholders and developers.</p>
+        </div>
+        
+        <div class="why-box">
+          <h4>Proactive Communication</h4>
+          <p>Ensuring complete transparency throughout the development lifecycle with continuous updates, clear reports, and client-centric alignment.</p>
+        </div>
+
+        <div class="why-box">
+          <h4>High Standards of Integrity</h4>
+          <p>Refusing sloppy, generic placeholders or rushed lines. Providing modular, thoroughly documented, and maintainable production code.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="pdf-footer">
+      <div>&copy; 2026 Preet Mehta | Professional Portfolio</div>
+      <div class="pdf-footer-logo">Thinker.</div>
+      <div>Page 2 of 2</div>
+    </footer>
+
+  </div>
+
+</body>
+
+</html>
